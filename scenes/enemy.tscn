@@ -1,8 +1,19 @@
-[gd_scene load_steps=10 format=3 uid="uid://cf1ftfprdjmxy"]
+[gd_scene load_steps=11 format=3 uid="uid://cf1ftfprdjmxy"]
 
 [ext_resource type="Texture2D" uid="uid://8jy0ehcsv1ox" path="res://assets/brackeys_platformer_assets/sprites/slime_green.png" id="1_g6m3g"]
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_xet74"]
-[ext_resource type="PackedScene" uid="uid://6b5lgdpem0jg" path="res://scenes/killzone.tscn" id="2_qoca7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3klwq"]
+atlas = ExtResource("1_g6m3g")
+region = Rect2(0, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sjbis"]
+atlas = ExtResource("1_g6m3g")
+region = Rect2(48, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qplgr"]
+atlas = ExtResource("1_g6m3g")
+region = Rect2(72, 48, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jmmoa"]
 atlas = ExtResource("1_g6m3g")
@@ -22,6 +33,20 @@ region = Rect2(72, 24, 24, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vujoo"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3klwq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sjbis")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qplgr")
+}],
+"loop": true,
+"name": &"death",
+"speed": 5.0
+}, {
 "frames": [],
 "loop": true,
 "name": &"default",
@@ -45,24 +70,14 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2qgnf"]
-size = Vector2(10, 12)
-
 [node name="Slime" type="Node2D"]
 script = ExtResource("1_xet74")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_vujoo")
-animation = &"new_animation"
+animation = &"death"
 autoplay = "new_animation"
-frame_progress = 0.0386109
-
-[node name="Killzone" parent="." instance=ExtResource("2_qoca7")]
-position = Vector2(-5, 16)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
-position = Vector2(5, -10)
-shape = SubResource("RectangleShape2D_2qgnf")
+frame_progress = 0.366621
 
 [node name="RayCastRight" type="RayCast2D" parent="."]
 position = Vector2(0, 7)

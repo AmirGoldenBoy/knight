@@ -8,8 +8,19 @@ func _ready():
 @onready var ray_cast_left = $RayCastLeft
 @onready var animated_sprite = $AnimatedSprite2D
 const SPEED = 60
-
+var health = 20
 var direction = -1	
+
+#Damage and death
+func die():
+	$AnimatedSprite2D.play("death")
+	queue_free()
+func take_damage():
+	health -= 20
+	if health <= 0:
+		health = 0
+		die()
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if ray_cast_right.is_colliding():
