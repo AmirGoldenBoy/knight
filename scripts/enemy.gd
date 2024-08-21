@@ -21,11 +21,11 @@ func take_damage(amount):
 # Función para morir
 func die():
 	$AnimatedSprite2D.play("death")
-	try_await()
+	await try_await()
 	$AnimatedSprite2D.animation_finished
 	queue_free()  # Elimina el enemigo de la escena
 	
 func try_await():
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(0.5).timeout
 	print("After timout")
 	
