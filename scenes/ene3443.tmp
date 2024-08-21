@@ -43,8 +43,13 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qplgr")
 }],
-"loop": false,
+"loop": true,
 "name": &"death",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"default",
 "speed": 5.0
 }, {
 "frames": [{
@@ -61,7 +66,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_oeqin")
 }],
 "loop": true,
-"name": &"idefault",
+"name": &"new_animation",
 "speed": 5.0
 }]
 
@@ -73,9 +78,14 @@ script = ExtResource("1_xet74")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_vujoo")
 animation = &"death"
-autoplay = "idefault"
-frame = 2
-frame_progress = 1.0
+autoplay = "new_animation"
+frame_progress = 0.366621
+
+[node name="HurtBox" type="Area2D" parent="AnimatedSprite2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/HurtBox"]
+position = Vector2(0, 4)
+shape = SubResource("CircleShape2D_em3j6")
 
 [node name="RayCastRight" type="RayCast2D" parent="."]
 position = Vector2(0, 7)
@@ -84,9 +94,3 @@ target_position = Vector2(11, 0)
 [node name="RayCastLeft" type="RayCast2D" parent="."]
 position = Vector2(1, 7)
 target_position = Vector2(-12, 0)
-
-[node name="HurtBox" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
-position = Vector2(0, 4)
-shape = SubResource("CircleShape2D_em3j6")

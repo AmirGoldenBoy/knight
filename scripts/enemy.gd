@@ -9,7 +9,7 @@ func _ready():
 @onready var animated_sprite = $AnimatedSprite2D
 const SPEED = 60
 var health = 20
-var direction = -1
+var direction = 1
 
 # Función para recibir daño
 func take_damage(amount):
@@ -21,15 +21,11 @@ func take_damage(amount):
 # Función para morir
 func die():
 	$AnimatedSprite2D.play("death")
-	await $AnimatedSprite2D.animation_finished
+	try_await()
+	$AnimatedSprite2D.animation_finished
 	queue_free()  # Elimina el enemigo de la escena
-
-# Función de movimiento (no cambiada)
-func _physics_process(delta):
-	if ray_cast_right.is_colliding() or not ray_cast_left.is_colliding():
-		direction = 1
-	elif ray_cast_left.is_colliding() or not ray_cast_right.is_colliding():
-		direction = -1
 	
-	position.x += direction * SPEED * delta
-	animated_sprite.flip_h = direction == -1
+func try_await():
+	await get_tree().create_timer(2.0).timeout
+	print("After timout")
+	
