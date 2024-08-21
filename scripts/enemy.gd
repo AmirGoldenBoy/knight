@@ -1,32 +1,35 @@
 extends Node2D
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	$HurtBox.add_to_group("hurtbox")  # Agrega el Area2D "HurtBox" al grupo "hurtbox"
+
 @onready var ray_cast_right = $RayCastRight
 @onready var ray_cast_left = $RayCastLeft
 @onready var animated_sprite = $AnimatedSprite2D
 const SPEED = 60
 var health = 20
-var direction = -1	
+var direction = -1
 
-#Damage and death
+# Función para recibir daño
+func take_damage(amount):
+	health -= amount
+	print("Enemigo recibió ", amount, " de daño. Salud restante: ", health)
+	if health <= 0:
+		die()
+
+# Función para morir
 func die():
 	$AnimatedSprite2D.play("death")
-	queue_free()
-func take_damage():
-	health -= 20
-	if health <= 0:
-		health = 0
-		die()
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	if ray_cast_right.is_colliding():
-		direction = -1
-		animated_sprite.flip_h = true
-	if ray_cast_left.is_colliding():
+	await $AnimatedSprite2D.animation_finished
+	queue_free()  # Elimina el enemigo de la escena
+
+# Función de movimiento (no cambiada)
+func _physics_process(delta):
+	if ray_cast_right.is_colliding() or not ray_cast_left.is_colliding():
 		direction = 1
-		animated_sprite.flip_h = false
+	elif ray_cast_left.is_colliding() or not ray_cast_right.is_colliding():
+		direction = -1
+	
 	position.x += direction * SPEED * delta
+	animated_sprite.flip_h = direction == -1
