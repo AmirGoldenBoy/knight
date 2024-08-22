@@ -9,21 +9,20 @@ const ATTACK_SPEED = 150.0   # Velocidad durante el ataque
 # Variables para la física y el estado del jugador
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var health = 100
-var damage = 20
+var damage = 60
 var is_attacking = false
 var attack_timer = 0.0
 
 # Nodos
-@onready var ray_cast_right = $RayCastRight
-@onready var ray_cast_left = $RayCastLeft
 @onready var animated_sprite = $AnimatedSprite2D
-@onready var hit_box = $HitBox  # El Hitbox
+@onready var hit_box: Area2D = $AnimatedSprite2D/HitBox
+
 
 func _ready():
 	# Conecta señales
 	animated_sprite.animation_finished.connect(_on_AnimatedSprite2D_animation_finished)
 	hit_box.area_entered.connect(_on_hit_box_area_entered)
-	hit_box.monitoring = false  # Desactivar el hitbox al inicio
+	hit_box.monitoring = false  
 
 func _physics_process(delta):
 	# Aplicar gravedad

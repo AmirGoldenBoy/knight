@@ -1,7 +1,10 @@
 [gd_scene load_steps=12 format=3 uid="uid://cf1ftfprdjmxy"]
 
 [ext_resource type="Texture2D" uid="uid://8jy0ehcsv1ox" path="res://assets/brackeys_platformer_assets/sprites/slime_green.png" id="1_g6m3g"]
-[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_xet74"]
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_vnkbt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4spkd"]
+size = Vector2(14, 13)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3klwq"]
 atlas = ExtResource("1_g6m3g")
@@ -65,17 +68,15 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_em3j6"]
-
 [node name="Slime" type="Node2D"]
-script = ExtResource("1_xet74")
+script = ExtResource("1_vnkbt")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_vujoo")
-animation = &"death"
-autoplay = "idefault"
-frame = 2
-frame_progress = 1.0
+[node name="HurtBox" type="Area2D" parent="."]
+position = Vector2(1, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(0, 5.5)
+shape = SubResource("RectangleShape2D_4spkd")
 
 [node name="RayCastRight" type="RayCast2D" parent="."]
 position = Vector2(0, 7)
@@ -85,8 +86,10 @@ target_position = Vector2(11, 0)
 position = Vector2(1, 7)
 target_position = Vector2(-12, 0)
 
-[node name="HurtBox" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
-position = Vector2(0, 4)
-shape = SubResource("CircleShape2D_em3j6")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(1, 0)
+sprite_frames = SubResource("SpriteFrames_vujoo")
+animation = &"death"
+autoplay = "idefault"
+frame = 2
+frame_progress = 1.0

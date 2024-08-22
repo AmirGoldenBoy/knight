@@ -7,7 +7,7 @@ func _ready():
 @onready var ray_cast_right = $RayCastRight
 @onready var ray_cast_left = $RayCastLeft
 @onready var animated_sprite = $AnimatedSprite2D
-const SPEED = 60
+const SPEED = 30
 var health = 20
 var direction = 1
 
@@ -28,4 +28,13 @@ func die():
 func try_await():
 	await get_tree().create_timer(0.5).timeout
 	print("After timout")
+
+func _process(_delta):
+	if ray_cast_right.is_colliding():
+		direction = -1
+		animated_sprite.flip_h = true
+	if ray_cast_left.is_colliding():
+		direction = 1
+		animated_sprite.flip_h = false
 	
+	position.x += direction + SPEED * _delta
