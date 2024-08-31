@@ -464,7 +464,7 @@ animations = [{
 "speed": 9.0
 }]
 
-[node name="Missile" type="Area2D"]
+[node name="Finalboss" type="CharacterBody2D"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 

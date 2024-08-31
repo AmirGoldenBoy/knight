@@ -19,6 +19,11 @@ config/icon="res://icon.svg"
 
 Music="*res://scenes/music.tscn"
 
+[global_group]
+
+enemies=""
+Environment=""
+
 [input]
 
 jump={
