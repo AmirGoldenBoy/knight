@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=3 uid="uid://dr7j1bclseria"]
+
+[ext_resource type="Texture2D" uid="uid://bbu4ljhodv7kl" path="res://assets/brackeys_platformer_assets/sprites/world_tileset.png" id="1_yenv2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y4oq1"]
+size = Vector2(16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4mcp4"]
+atlas = ExtResource("1_yenv2")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v747h"]
+atlas = ExtResource("1_yenv2")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_el5dh"]
+atlas = ExtResource("1_yenv2")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ahv4j"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4mcp4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v747h")
+}],
+"loop": false,
+"name": &"activate",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_el5dh")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="Node2D" type="StaticBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_y4oq1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ahv4j")
+autoplay = "default"
+frame_progress = 1.0
