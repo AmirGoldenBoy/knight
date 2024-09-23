@@ -16,7 +16,8 @@ var attack_timer = 0.0
 # Nodos
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var hit_box: Area2D = $AnimatedSprite2D/HitBox
-
+@export var missile_scene : PackedScene # Arrastra la escena del misil aquí
+@export var fire_rate = 1.0 # Tiempo entre disparos
 
 func _ready():
 	# Conecta señales

@@ -23,6 +23,7 @@ Music="*res://scenes/music.tscn"
 
 enemies=""
 Environment=""
+Player=""
 
 [input]
 

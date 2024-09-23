@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://dr7j1bclseria"]
+[gd_scene load_steps=9 format=3 uid="uid://dr7j1bclseria"]
 
+[ext_resource type="Script" path="res://scripts/node_2d.gd" id="1_3ov25"]
 [ext_resource type="Texture2D" uid="uid://bbu4ljhodv7kl" path="res://assets/brackeys_platformer_assets/sprites/world_tileset.png" id="1_yenv2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y4oq1"]
@@ -39,7 +40,13 @@ animations = [{
 "speed": 10.0
 }]
 
-[node name="Node2D" type="StaticBody2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_4f1op"]
+radius = 11.0
+
+[node name="Cube" type="StaticBody2D"]
+collision_layer = 7
+collision_mask = 6
+script = ExtResource("1_3ov25")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_y4oq1")
@@ -47,4 +54,10 @@ shape = SubResource("RectangleShape2D_y4oq1")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_ahv4j")
 autoplay = "default"
-frame_progress = 1.0
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_4f1op")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

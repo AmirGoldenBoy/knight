@@ -1,16 +1,12 @@
-extends Area2D
+extends RigidBody2D
 
 @export var speed = 300
 @export var damage = 10
 var direction = Vector2.RIGHT
-# Called when the node enters	 the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta):
-	position += direction * speed * delta
+func _ready():
+	# Aplicar una fuerza inicial al misil
+	apply_impulse(Vector2.ZERO, direction * speed)
 
 func _on_body_entered(body):
 	if body.is_in_group("enemies"):
@@ -22,5 +18,5 @@ func _on_area_entered(area):
 		explode()
 
 func explode():
-	# Aquí puedes añadir efectos de explosión
+	# Aquí puedes añadir efectos de explosión, sonidos, etc.
 	queue_free()

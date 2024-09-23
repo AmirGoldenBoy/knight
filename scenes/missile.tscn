@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cxjmmgcnntgkp"]
+[gd_scene load_steps=10 format=3 uid="uid://cxjmmgcnntgkp"]
 
 [ext_resource type="Script" path="res://missile.gd" id="1_du1f5"]
 [ext_resource type="Texture2D" uid="uid://dlshsidnpujbq" path="res://assets/brackeys_platformer_assets/sprites/spritesheet arrow.png" id="2_8btd1"]
@@ -42,7 +42,10 @@ animations = [{
 "speed": 10.0
 }]
 
-[node name="Missile" type="Area2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5cmka"]
+size = Vector2(30, 5)
+
+[node name="Missile" type="RigidBody2D"]
 script = ExtResource("1_du1f5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -54,3 +57,9 @@ position = Vector2(0, 1)
 sprite_frames = SubResource("SpriteFrames_hlmov")
 frame = 3
 frame_progress = 0.408485
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_5cmka")
