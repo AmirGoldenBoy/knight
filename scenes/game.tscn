@@ -316,3 +316,5 @@ position = Vector2(137, -28)
 
 [node name="Cube" parent="." instance=ExtResource("9_65au0")]
 position = Vector2(135, -59)
+
+[connection signal="player_gained_missile_ability" from="Cube" to="Player" method="_on_cube_player_gained_missile_ability"]

@@ -12,18 +12,20 @@ var health = 100
 var damage = 60
 var is_attacking = false
 var attack_timer = 0.0
+var can_shoot_missiles = false # Indica si el jugador tiene la habilidad de disparar misiles
+var time_since_last_shot = 0.0 # Temporizador para el disparo de misiles
 
 # Nodos
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var hit_box: Area2D = $AnimatedSprite2D/HitBox
-@export var missile_scene : PackedScene # Arrastra la escena del misil aquí
+@export var missile_scene: PackedScene # Arrastra la escena del misil aquí
 @export var fire_rate = 1.0 # Tiempo entre disparos
 
 func _ready():
 	# Conecta señales
 	animated_sprite.animation_finished.connect(_on_AnimatedSprite2D_animation_finished)
 	hit_box.area_entered.connect(_on_hit_box_area_entered)
-	hit_box.monitoring = false  
+	hit_box.monitoring = false
 
 func _physics_process(delta):
 	# Aplicar gravedad
@@ -40,7 +42,7 @@ func _physics_process(delta):
 	# Voltear el sprite según la dirección
 	if direction > 0:
 		animated_sprite.flip_h = false
-	elif direction < 0:    
+	elif direction < 0:
 		animated_sprite.flip_h = true 
 
 	# Manejar animaciones y movimiento
@@ -69,10 +71,24 @@ func _physics_process(delta):
 	
 	# Aplicar movimiento
 	move_and_slide()
+
+	# Manejar disparo de misiles
+	if can_shoot_missiles:
+		time_since_last_shot += delta
+		if Input.is_action_pressed("shoot_missile") and time_since_last_shot >= fire_rate:
+			shoot_missile()
+			time_since_last_shot = 0.0
 	 
 	# Iniciar ataque
 	if Input.is_action_just_pressed("Attack") and not is_attacking:
 		start_attack()
+
+func shoot_missile():
+	# Instanciar el misil
+	var missile = missile_scene.instantiate()
+	missile.position = global_position + Vector2((1 if animated_sprite.flip_h else -1) * 20, 0) # Ajustar la posición inicial según la dirección
+	get_parent().add_child(missile) # Añadir el misil a la escena
+	missile.direction = Vector2.LEFT if animated_sprite.flip_h else Vector2.RIGHT # Ajustar la dirección
 
 func start_attack():
 	is_attacking = true
@@ -103,3 +119,18 @@ func _process(_delta):
 	if is_attacking:
 		print("Frame actual de Attack: ", animated_sprite.frame)
 		print("Tiempo transcurrido en el ataque: ", attack_timer)
+
+
+func _on_cube_player_gained_missile_ability() -> void:
+	print("¡Habilidad de misiles obtenida desde el cubo!")
+	can_shoot_missiles = true
+func _on_player_gained_missile_ability():
+	print("¡Habilidad obtenida!")
+	can_shoot_missiles = true
+func _unhandled_input(event):
+	if event.is_action_pressed("shoot_missile"):
+		print("Tecla de disparo de misil presionada")
+		if can_shoot_missiles:
+			print("Intentando disparar misil")
+		else:
+			print("No se puede disparar misil aún")
