@@ -83,12 +83,15 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("Attack") and not is_attacking:
 		start_attack()
 
+
 func shoot_missile():
-	# Instanciar el misil
 	var missile = missile_scene.instantiate()
-	missile.position = global_position + Vector2((1 if animated_sprite.flip_h else -1) * 20, 0) # Ajustar la posición inicial según la dirección
-	get_parent().add_child(missile) # Añadir el misil a la escena
-	missile.direction = Vector2.LEFT if animated_sprite.flip_h else Vector2.RIGHT # Ajustar la dirección
+	var spawn_offset = Vector2(30 if not animated_sprite.flip_h else -30, 0)
+	missile.position = global_position + spawn_offset
+	missile.direction = Vector2.RIGHT if not animated_sprite.flip_h else Vector2.LEFT
+	missile.shooter = self  # Referencia al jugador que dispara
+	get_parent().add_child(missile)
+	print("Misil disparado en dirección: ", missile.direction)
 
 func start_attack():
 	is_attacking = true
