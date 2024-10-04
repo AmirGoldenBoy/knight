@@ -56,6 +56,8 @@ sprite_frames = SubResource("SpriteFrames_ahv4j")
 autoplay = "default"
 
 [node name="Area2D" type="Area2D" parent="."]
+collision_layer = 15
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_4f1op")

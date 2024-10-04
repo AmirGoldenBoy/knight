@@ -60,6 +60,7 @@ shoot_missile={
 2d_physics/layer_1="world"
 2d_physics/layer_2="objects"
 2d_physics/layer_3="attack"
+2d_physics/layer_4="enemies"
 
 [rendering]
 
