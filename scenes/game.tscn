@@ -10,7 +10,7 @@
 [ext_resource type="FontFile" uid="uid://cp3ncnl5qyuig" path="res://assets/brackeys_platformer_assets/fonts/PixelOperator8.ttf" id="7_llj6k"]
 [ext_resource type="PackedScene" uid="uid://dr7j1bclseria" path="res://scenes/node_2d.tscn" id="9_65au0"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_01c4n"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rk0l6"]
 texture = ExtResource("2_3wuhg")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -190,7 +190,7 @@ texture = ExtResource("2_3wuhg")
 
 [sub_resource type="TileSet" id="TileSet_gb2ks"]
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_01c4n")
+sources/0 = SubResource("TileSetAtlasSource_rk0l6")
 
 [sub_resource type="Animation" id="Animation_obrvb"]
 length = 0.001
@@ -209,7 +209,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = false
-tracks/1/path = NodePath("../Platform4:position")
+tracks/1/path = NodePath(".:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -241,7 +241,7 @@ loop_mode = 2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../Platform4:position")
+tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -279,7 +279,7 @@ _data = {
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_e84tx"]
 distance = -209.0
 
-[node name="Game" type="Node2D"]
+[node name="Level" type="Node2D"]
 
 [node name="GameManager" type="Node" parent="."]
 unique_name_in_owner = true
@@ -325,7 +325,6 @@ position = Vector2(21, -7)
 position = Vector2(972.938, -11.1355)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Platforms/Platform3"]
-root_node = NodePath("../../Platform3")
 libraries = {
 "": SubResource("AnimationLibrary_a8e1u")
 }
@@ -335,7 +334,6 @@ autoplay = "move"
 position = Vector2(1021, -10)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Platforms/Platform4"]
-root_node = NodePath("../../Platform4")
 libraries = {
 "": SubResource("AnimationLibrary_a8e1u")
 }
