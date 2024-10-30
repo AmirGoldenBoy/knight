@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 # Constantes para el movimiento y el ataque
-const SPEED = 200.0
+const SPEED = 400.0
 const JUMP_VELOCITY = -300.0
 const ATTACK_DURATION = 1.0  # Duración del ataque en segundos
 const ATTACK_SPEED = 150.0   # Velocidad durante el ataque
@@ -156,3 +156,11 @@ func _unhandled_input(event):
 			print("Intentando disparar misil")
 		else:
 			print("No se puede disparar misil aún")
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	pass # Replace with function body.
+
+
+func _on_nextlevel_body_entered(body: Node2D) -> void:
+	pass # Replace with function body.

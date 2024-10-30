@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://ep43fs0r66fv"]
+
+[ext_resource type="Script" path="res://scripts/slimemissile.gd" id="1_q6tk8"]
+[ext_resource type="Texture2D" uid="uid://dso65bi2sblli" path="res://assets/Slime pack/Slime projectile.png" id="1_rd661"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ou7i5"]
+atlas = ExtResource("1_rd661")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l5tmp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ou7i5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7spds"]
+
+[node name="Node2D" type="Area2D"]
+collision_layer = 5
+collision_mask = 3
+script = ExtResource("1_q6tk8")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_l5tmp")
+frame_progress = 0.353789
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_7spds")

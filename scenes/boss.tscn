@@ -470,7 +470,5 @@ animations = [{
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_lyrfx")
-animation = &"new_animation_3"
 autoplay = "default"
-frame = 8
-frame_progress = 0.794946
+frame_progress = 0.133824
