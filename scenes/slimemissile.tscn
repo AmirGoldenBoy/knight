@@ -20,14 +20,16 @@ animations = [{
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7spds"]
 
-[node name="Node2D" type="Area2D"]
-collision_layer = 5
-collision_mask = 3
+[node name="Node2D" type="Area2D" groups=["missile"]]
+collision_layer = 32
+collision_mask = 16
 script = ExtResource("1_q6tk8")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_l5tmp")
-frame_progress = 0.353789
+frame_progress = 0.821873
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_7spds")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -3,10 +3,10 @@ extends CharacterBody2D
 # Constantes para el movimiento y el ataque
 const SPEED = 400.0
 const JUMP_VELOCITY = -300.0
-const ATTACK_DURATION = 1.0  # Duración del ataque en segundos
-const ATTACK_SPEED = 150.0   # Velocidad durante el ataque
-const MELEE_COOLDOWN = 2.5   # Cooldown de 2.5 segundos para el ataque cuerpo a cuerpo
-const MAX_MISSILES = 10      # Máximo de misiles
+const ATTACK_DURATION = 1.0
+const ATTACK_SPEED = 150.0   
+const MELEE_COOLDOWN = 2.5   
+const MAX_MISSILES = 10      
 
 # Variables para la física y el estado del jugador
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -14,22 +14,21 @@ var health = 100
 var damage = 60
 var is_attacking = false
 var attack_timer = 0.0
-var attack_cooldown_timer = 0.0  # Temporizador para el cooldown del ataque
-var can_shoot_missiles = false   # Indica si el jugador tiene la habilidad de disparar misiles
-var time_since_last_shot = 0.0   # Temporizador para el disparo de misiles
-var missile_count = MAX_MISSILES # Cantidad de misiles disponibles
+var attack_cooldown_timer = 0.0
+var can_shoot_missiles = false
+var time_since_last_shot = 0.0
+var missile_count = MAX_MISSILES
 
 # Nodos
 @onready var animated_sprite = $AnimatedSprite2D
-@onready var hit_box: Area2D = $AnimatedSprite2D/HitBox
-@export var missile_scene: PackedScene # Arrastra la escena del misil aquí
-@export var fire_rate = 1.0 # Tiempo entre disparos
+@onready var hit_box: Area2D = $HitBox
+@export var missile_scene: PackedScene 
+@export var fire_rate = 1.0 
 
 func _ready():
-	# Conecta señales
+	# Conectar señales
 	animated_sprite.animation_finished.connect(_on_AnimatedSprite2D_animation_finished)
-	hit_box.area_entered.connect(_on_hit_box_area_entered)
-	hit_box.monitoring = false
+	hit_box.monitoring = true  # Habilitar detección de colisiones
 
 func _physics_process(delta):
 	# Aplicar gravedad
@@ -44,10 +43,7 @@ func _physics_process(delta):
 	var direction = Input.get_axis("move_left", "move_right")
 	
 	# Voltear el sprite según la dirección
-	if direction > 0:
-		animated_sprite.flip_h = false
-	elif direction < 0:
-		animated_sprite.flip_h = true 
+	animated_sprite.flip_h = direction < 0
 
 	# Movimiento y animaciones normales cuando no está atacando
 	if not is_attacking: 
@@ -60,16 +56,12 @@ func _physics_process(delta):
 			animated_sprite.play("Jump")
 		
 		# Movimiento normal
-		if direction != 0:
-			velocity.x = direction * SPEED
-		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.x = direction * SPEED
 
-	# Manejar el cooldown del ataque cuerpo a cuerpo
+	# Manejar cooldowns y ataques
 	if attack_cooldown_timer > 0:
 		attack_cooldown_timer -= delta
 
-	# Durante el ataque
 	if is_attacking:
 		attack_timer += delta
 		if attack_timer <= ATTACK_DURATION:
@@ -87,9 +79,14 @@ func _physics_process(delta):
 			shoot_missile()
 			time_since_last_shot = 0.0
 	 
-	# Iniciar ataque cuerpo a cuerpo si no está atacando o en cooldown
+	# Iniciar ataque cuerpo a cuerpo
 	if Input.is_action_just_pressed("Attack") and not is_attacking and attack_cooldown_timer <= 0:
 		start_attack()
+
+	# Detectar colisiones con proyectiles
+	for area in hit_box.get_overlapping_areas(): 
+		if area.is_in_group("projectiles"):
+			_on_projectile_collision(area)
 
 func shoot_missile():
 	if missile_count > 0:
@@ -97,7 +94,7 @@ func shoot_missile():
 		var spawn_offset = Vector2(30 if not animated_sprite.flip_h else -30, 0)
 		missile.position = global_position + spawn_offset
 		missile.direction = Vector2.RIGHT if not animated_sprite.flip_h else Vector2.LEFT
-		missile.shooter = self  # Referencia al jugador que dispara
+		missile.shooter = self
 		get_parent().add_child(missile)
 		missile_count -= 1
 		print("Misil disparado en dirección: ", missile.direction)
@@ -109,7 +106,7 @@ func start_attack():
 	is_attacking = true
 	attack_timer = 0.0
 	animated_sprite.play("Attack")
-	hit_box.monitoring = true
+	hit_box.monitoring = true  # Activar la hitbox para ataques
 	attack_cooldown_timer = MELEE_COOLDOWN
 	print("Iniciando ataque, cooldown activado")
 
@@ -122,12 +119,12 @@ func end_attack():
 	hit_box.monitoring = false
 	print("Ataque terminado, cambiando a idle")
 
-func _on_hit_box_area_entered(area):
-	if area.is_in_group("hurtbox"):
-		var enemy = area.get_parent()
-		if enemy.has_method("take_damage"):
-			enemy.take_damage(damage)
-			print("Daño infligido al enemigo")
+func _on_projectile_collision(projectile: Area2D):
+	if projectile.has_method("get_damage"):
+		var damage_received = projectile.get_damage()
+		print("Jugador colisionó con proyectil. Daño recibido: ", damage_received)
+		take_damage(damage_received)
+		projectile.queue_free()  # Opcional: eliminar el proyectil tras la colisión.
 
 func take_damage(amount):
 	health -= amount
@@ -144,23 +141,8 @@ func _on_cube_player_gained_missile_ability() -> void:
 	can_shoot_missiles = true
 	missile_count = MAX_MISSILES  # Restaurar las cargas de misiles
 
-func _on_player_gained_missile_ability():
-	print("¡Habilidad obtenida!")
-	can_shoot_missiles = true
-	missile_count = MAX_MISSILES
-
-func _unhandled_input(event):
-	if event.is_action_pressed("shoot_missile"):
-		print("Tecla de disparo de misil presionada")
-		if can_shoot_missiles and missile_count > 0:
-			print("Intentando disparar misil")
-		else:
-			print("No se puede disparar misil aún")
-
-
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	pass # Replace with function body.
-
+	pass  # Reemplazar con el cuerpo de la función.
 
 func _on_nextlevel_body_entered(body: Node2D) -> void:
-	pass # Replace with function body.
+	pass  # Reemplazar con el cuerpo de la función.

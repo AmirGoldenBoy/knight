@@ -56,4 +56,5 @@ func shoot_projectile():
 	
 	# Añadir el proyectil a la escena
 	get_parent().add_child(projectile)
-	
+
+# Función para manejar el daño al jugador

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://tdf7hh37bqqx"]
+[gd_scene load_steps=25 format=3 uid="uid://tdf7hh37bqqx"]
 
 [ext_resource type="Script" path="res://scripts/SlimeBoss.gd" id="1_e4hxd"]
 [ext_resource type="PackedScene" uid="uid://ep43fs0r66fv" path="res://scenes/slimemissile.tscn" id="2_7agdd"]
@@ -48,6 +48,18 @@ region = Rect2(24, 0, 24, 24)
 atlas = ExtResource("3_nxc8c")
 region = Rect2(0, 0, 24, 24)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_mkkqr"]
+atlas = ExtResource("3_nxc8c")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p14x5"]
+atlas = ExtResource("3_nxc8c")
+region = Rect2(48, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1d5v8"]
+atlas = ExtResource("3_nxc8c")
+region = Rect2(24, 24, 24, 24)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_stw6d"]
 atlas = ExtResource("3_nxc8c")
 region = Rect2(72, 0, 24, 24)
@@ -84,7 +96,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack",
-"speed": 7.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -111,6 +123,20 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_mkkqr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p14x5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1d5v8")
+}],
+"loop": true,
+"name": &"hurt",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_stw6d")
 }, {
 "duration": 1.0,
@@ -130,6 +156,9 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_asvis"]
 radius = 15.1327
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_4pmcb"]
+radius = 15.0
+
 [node name="SlimeBoss" type="Node2D" groups=["enemies"]]
 script = ExtResource("1_e4hxd")
 detection_range = 250
@@ -141,11 +170,22 @@ scale = Vector2(1.70833, 1.79167)
 sprite_frames = SubResource("SpriteFrames_86tbu")
 animation = &"idle"
 autoplay = "idle"
+frame_progress = 0.701188
 
-[node name="Hurtbox" type="Area2D" parent="."]
-collision_layer = 13
-collision_mask = 13
+[node name="HurtBox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 20
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" groups=["enemies"]]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" groups=["enemies"]]
 position = Vector2(0, 12)
 shape = SubResource("CircleShape2D_asvis")
+
+[node name="DamageBox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageBox"]
+position = Vector2(0, 12)
+shape = SubResource("CircleShape2D_4pmcb")
+
+[connection signal="area_entered" from="DamageBox" to="." method="_on_damage_box_area_entered"]

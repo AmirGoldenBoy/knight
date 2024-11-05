@@ -286,7 +286,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Run",
-"speed": 10.0
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -310,12 +310,12 @@ animations = [{
 size = Vector2(17, 20)
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
-collision_layer = 3
-collision_mask = 6
+collision_layer = 16
+collision_mask = 41
 script = ExtResource("1_ddho3")
 missile_scene = ExtResource("2_hay2m")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Player"]]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -9)
 shape = SubResource("CircleShape2D_113t7")
 
@@ -323,13 +323,13 @@ shape = SubResource("CircleShape2D_113t7")
 z_index = 5
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_3w4k7")
-animation = &"Attack"
+animation = &"Death"
 autoplay = "idle"
 
-[node name="HitBox" type="Area2D" parent="AnimatedSprite2D"]
-position = Vector2(0, 12)
-collision_mask = 3
+[node name="HitBox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 8
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/HitBox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 position = Vector2(3, -10)
 shape = SubResource("RectangleShape2D_w5evu")

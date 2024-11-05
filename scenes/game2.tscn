@@ -642,13 +642,11 @@ script = ExtResource("1_4gfmr")
 
 [node name="Player" parent="." instance=ExtResource("2_7pfar")]
 position = Vector2(-952, -32)
-collision_layer = 15
-collision_mask = 11
+collision_mask = 63
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(-14, -29)
 scale = Vector2(1, 0.490325)
-zoom = Vector2(3.5, 3.5)
 limit_bottom = 500
 limit_smoothed = true
 
@@ -770,6 +768,6 @@ position = Vector2(1195, 52)
 position = Vector2(817, -27)
 
 [node name="SlimeBoss" parent="." instance=ExtResource("10_8rko4")]
-position = Vector2(-850, -53)
+position = Vector2(-749, -22)
 
 [connection signal="player_gained_missile_ability" from="Cube" to="Player" method="_on_cube_player_gained_missile_ability"]
