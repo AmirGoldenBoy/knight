@@ -9,11 +9,14 @@ var player
 var can_shoot = true
 var health = 100
 func _ready():
+	$HurtBox.add_to_group("hurtbox")  # Agrega el Area2D "HurtBox" al grupo "hurtbox"
+	add_to_group("enemies") 
 	# Obtener la referencia al jugador en la escena
 	player = get_tree().get_nodes_in_group("Player")[0]  # Reemplaza con la ruta real al jugador
 func take_damage(amount):
 	print("Recibí daño")
 	health -= amount
+	$AnimatedSprite2D.play("hurt")
 	print("Enemigo recibió ", amount, " de daño. Salud restante: ", health)
 	if health <= 0:
 		die()

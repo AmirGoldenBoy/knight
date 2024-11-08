@@ -3,9 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://8jy0ehcsv1ox" path="res://assets/brackeys_platformer_assets/sprites/slime_green.png" id="1_g6m3g"]
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_vnkbt"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_4spkd"]
-size = Vector2(18, 15)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_3klwq"]
 atlas = ExtResource("1_g6m3g")
 region = Rect2(0, 48, 24, 24)
@@ -76,25 +73,21 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_o3isy"]
 radius = 7.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4spkd"]
+size = Vector2(18, 15)
+
 [node name="Slime" type="Node2D" groups=["enemies"]]
 script = ExtResource("1_vnkbt")
-
-[node name="HurtBox" type="Area2D" parent="."]
-position = Vector2(1, 0)
-collision_layer = 15
-collision_mask = 5
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
-position = Vector2(0, 4.5)
-shape = SubResource("RectangleShape2D_4spkd")
 
 [node name="RayCastRight" type="RayCast2D" parent="."]
 position = Vector2(0, 7)
 target_position = Vector2(11, 0)
+collision_mask = 17
 
 [node name="RayCastLeft" type="RayCast2D" parent="."]
 position = Vector2(1, 7)
 target_position = Vector2(-12, 0)
+collision_mask = 17
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, 0)
@@ -108,3 +101,12 @@ collision_layer = 5
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DamageBox"]
 position = Vector2(1, 5)
 shape = SubResource("CircleShape2D_o3isy")
+
+[node name="HurtBox" type="Area2D" parent="."]
+position = Vector2(1, 0)
+collision_layer = 8
+collision_mask = 53
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(0, 4.5)
+shape = SubResource("RectangleShape2D_4spkd")
