@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://dmnqvect0noil"]
+[gd_scene load_steps=14 format=4 uid="uid://dmnqvect0noil"]
 
 [ext_resource type="Script" path="res://scripts/GameManager.gd" id="1_cyvnk"]
 [ext_resource type="PackedScene" uid="uid://dd3aban0fj2ya" path="res://scenes/player.tscn" id="2_tpqxt"]
@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" uid="uid://cp3ncnl5qyuig" path="res://assets/brackeys_platformer_assets/fonts/PixelOperator8.ttf" id="6_iopqb"]
 [ext_resource type="PackedScene" uid="uid://dr7j1bclseria" path="res://scenes/node_2d.tscn" id="8_0aiaw"]
 [ext_resource type="PackedScene" uid="uid://do35jaobrrnf2" path="res://scenes/torch.tscn" id="8_y6bvu"]
+[ext_resource type="PackedScene" uid="uid://bns5g4u2hb2hp" path="res://scenes/boss.tscn" id="9_fo58v"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rk0l6"]
 texture = ExtResource("3_elsey")
@@ -640,8 +641,7 @@ script = ExtResource("1_cyvnk")
 
 [node name="Player" parent="." instance=ExtResource("2_tpqxt")]
 position = Vector2(-1227, -241)
-collision_layer = 15
-collision_mask = 11
+collision_mask = 9
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(-14, -29)
@@ -893,5 +893,8 @@ position = Vector2(334, 0)
 
 [node name="torch10" parent="Node/torch16" instance=ExtResource("8_y6bvu")]
 position = Vector2(384, 0)
+
+[node name="Finalboss" parent="." instance=ExtResource("9_fo58v")]
+position = Vector2(-982, 291)
 
 [connection signal="player_gained_missile_ability" from="Cube" to="Player" method="_on_cube_player_gained_missile_ability"]

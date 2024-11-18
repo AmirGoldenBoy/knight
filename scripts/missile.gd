@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var speed = 300
+@export var speed = 500
 @export var damage = 10
 @export var vertical_offset = 10  # Ajusta este valor para cambiar qué tan arriba aparece el misil
 

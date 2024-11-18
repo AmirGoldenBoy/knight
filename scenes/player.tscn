@@ -325,10 +325,8 @@ debug_color = Color(0.839668, 0.279225, 0.408366, 0.42)
 z_index = 5
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_3w4k7")
-animation = &"Death"
+animation = &"Attack"
 autoplay = "idle"
-frame = 3
-frame_progress = 1.0
 
 [node name="HitBox" type="Area2D" parent="." groups=["Player"]]
 collision_layer = 4

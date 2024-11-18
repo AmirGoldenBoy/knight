@@ -6,6 +6,7 @@
 size = Vector2(34, 52)
 
 [node name="nextlevel2" type="Area2D"]
+collision_mask = 16
 script = ExtResource("1_fqv7k")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
