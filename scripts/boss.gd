@@ -63,24 +63,29 @@ func _physics_process(delta):
 	move_and_slide()
 
 func start_attack():
+	if not can_attack:
+		return
+
 	is_attacking = true
 	can_attack = false
-	if animated_sprite:
-		animated_sprite.play("Attack")
-	attack_timer.start()
 
+	# Activar el `HitBox` antes de la animación
 	hitbox.set_deferred("monitoring", true)
 	hitbox.set_deferred("monitorable", true)
-	print("HitBox activado durante ataque")
+	print("HitBox activado durante el ataque")
 
+	# Reproducir animación de ataque
 	if animated_sprite:
-		await animated_sprite.animation_finished
+		animated_sprite.play("Attack")
 
+	# Desactivar el `HitBox` después de la animación
+	await animated_sprite.animation_finished
 	hitbox.set_deferred("monitoring", false)
 	hitbox.set_deferred("monitorable", false)
 	print("HitBox desactivado después del ataque")
 
 	is_attacking = false
+	attack_timer.start()
 	if animated_sprite:
 		animated_sprite.play("Idle")
 
@@ -141,19 +146,17 @@ func _on_hurt_box_area_entered(area: Area2D):
 			take_damage(player_damage)
 			print("Boss recibió daño del jugador: ", player_damage)
 
-func _on_hit_box_body_entered(body: Node2D) -> void:
-	print("Colisión detectada con: ", body.name, " - Tipo: ", body.get_class())
-	print("Estado de ataque: ", is_attacking)
-	print("Grupos del cuerpo: ", body.get_groups())
-	if not is_attacking:
+func _on_hit_box_body_entered(body: Node2D):
+	print("Boss HitBox colisionó con: ", body.name)
+
+	# Verificar que el cuerpo no sea el mismo jefe
+	if body == self or !is_instance_valid(body):
+		print("Colisión ignorada: cuerpo no válido o pertenece al jefe")
 		return
-		print("Boss HitBox colisionó con: ", body.name)
-		if body is CharacterBody2D and body.has_method("take_damage"):	
-			print("Cuerpo es jugador")
-			print("Jugador tiene método take_damage")
-			print("Llamando a take_damage del jugador")
-			print("Boss golpeó al jugador por: ", ATTACK_DAMAGE)
-			body.take_damage(ATTACK_DAMAGE)
-			print("Salud restante del jugador: ", body.health)
-		else:
-			print ("Nodo no valido")
+	
+	# Verificar si el cuerpo es un CharacterBody2D y tiene un método `take_damage`
+	if body is CharacterBody2D and body.has_method("take_damage"):
+		print("Aplicando daño al objetivo:", body.name)
+		body.take_damage(ATTACK_DAMAGE)
+	else:
+		print("Colisión con nodo no válido para recibir daño")

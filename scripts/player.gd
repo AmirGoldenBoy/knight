@@ -26,6 +26,10 @@ var direction = 0
 var roll_direction = Vector2.ZERO
 
 # Nodos
+@onready var attack_sfx = $attacksfx
+@onready var powerup_sfx = $powerupsfx
+@onready var arrow_sfx = $arrowsfx
+@onready var jump_sfx = $Jumpsfx
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var hit_box: Area2D = $HitBox
 @export var missile_scene: PackedScene 
@@ -62,7 +66,7 @@ func apply_gravity_and_movement(delta):
 		velocity.y += gravity * delta
 	if Input.is_action_just_pressed("jump") and is_on_floor() and not is_attacking:
 		velocity.y = JUMP_VELOCITY
-
+		jump_sfx.play()  # Reproducir sonido de salto
 	direction = Input.get_axis("move_left", "move_right")
 	
 	if direction > 0:
@@ -97,6 +101,7 @@ func update_attack_cooldown(delta):
 func shoot_missiles(delta):
 	if can_shoot_missiles and Input.is_action_pressed("shoot_missile") and time_since_last_shot >= fire_rate and missile_count > 0:
 		shoot_missile()
+		arrow_sfx.play()
 		time_since_last_shot = 0.0
 	else:
 		time_since_last_shot += delta
@@ -119,6 +124,7 @@ func start_attack():
 	animated_sprite.play("Attack")
 	hit_box.monitoring = true  # Activar la hitbox para el ataque
 	attack_cooldown_timer = MELEE_COOLDOWN
+	attack_sfx.play()
 	print("Iniciando ataque")
 
 func end_attack():
@@ -168,12 +174,12 @@ func die():
 	# Reiniciar la escena
 	get_tree().reload_current_scene()
 func _on_cube_player_gained_missile_ability():
+	powerup_sfx.play()
 	can_shoot_missiles = true
 	missile_count = MAX_MISSILES
 	print("Habilidad de misiles obtenida")
 
 func _on_hit_box_area_entered(area: Area2D) -> void:
-	print("Melee: ", area.name, " - Grupos: ", area.get_groups())
 	if not is_attacking:
 		return
 	if area.is_in_group("hurtbox"):

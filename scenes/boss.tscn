@@ -498,12 +498,12 @@ shape = SubResource("RectangleShape2D_fn7v7")
 debug_color = Color(1, 0.189845, 0.162186, 0.419608)
 
 [node name="HitBox" type="Area2D" parent="."]
-position = Vector2(-98, -25)
+position = Vector2(-75, -2)
 collision_layer = 8
 collision_mask = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-position = Vector2(23, 20)
+position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_c8rhl")
 
 [connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]

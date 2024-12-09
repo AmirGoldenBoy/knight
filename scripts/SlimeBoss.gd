@@ -1,5 +1,5 @@
 extends Node2D
-
+@onready var death_sfx = $deathsfx
 @export var detection_range = 500  # Distancia a la que el enemigo detecta al jugador
 @export var shoot_cooldown = 2.0  # Tiempo de espera entre disparos
 @export var projectile_scene : PackedScene  # Escena del proyectil a instanciar
@@ -24,6 +24,7 @@ func take_damage(amount):
 # Función para morir
 func die():
 	$AnimatedSprite2D.play("death")
+	death_sfx.play()
 	await try_await()
 	queue_free()  # Elimina el enemigo de la escena
 	

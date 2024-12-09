@@ -1,8 +1,12 @@
-[gd_scene load_steps=45 format=3 uid="uid://dd3aban0fj2ya"]
+[gd_scene load_steps=49 format=3 uid="uid://dd3aban0fj2ya"]
 
 [ext_resource type="Texture2D" uid="uid://bakn5x4naw8bp" path="res://assets/brackeys_platformer_assets/sprites/knight.png" id="1_c5kwa"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ddho3"]
 [ext_resource type="PackedScene" uid="uid://cxjmmgcnntgkp" path="res://scenes/missile.tscn" id="2_hay2m"]
+[ext_resource type="AudioStream" uid="uid://dxdjeidpepx2y" path="res://assets/brackeys_platformer_assets/sounds/jump.wav" id="4_37wnk"]
+[ext_resource type="AudioStream" uid="uid://cgplq6ixror7u" path="res://assets/brackeys_platformer_assets/sounds/tap.wav" id="5_lfe2p"]
+[ext_resource type="AudioStream" uid="uid://ci64phpwo1q63" path="res://assets/brackeys_platformer_assets/sounds/power_up.wav" id="6_8kxyg"]
+[ext_resource type="AudioStream" uid="uid://2qep2oehka27" path="res://assets/brackeys_platformer_assets/sounds/22_Slash_04.wav" id="7_jr7l0"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_s3b8u"]
 radius = 5.0
@@ -226,7 +230,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Hit",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -308,7 +312,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ccx11"]
-radius = 13.25
+radius = 12.0416
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 collision_layer = 16
@@ -333,7 +337,19 @@ collision_layer = 4
 collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-position = Vector2(-0.25, -10)
+position = Vector2(0, -9)
 shape = SubResource("CircleShape2D_ccx11")
+
+[node name="Jumpsfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_37wnk")
+
+[node name="arrowsfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_lfe2p")
+
+[node name="powerupsfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_8kxyg")
+
+[node name="attacksfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_jr7l0")
 
 [connection signal="area_entered" from="HitBox" to="." method="_on_hit_box_area_entered"]

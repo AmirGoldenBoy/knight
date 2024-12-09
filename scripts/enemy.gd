@@ -1,5 +1,6 @@
 extends Node2D
 
+@onready var death_sfx = $deathsfx
 @onready var damage_box: Area2D = $DamageBox
 @onready var ray_cast_right = $RayCastRight
 @onready var ray_cast_left = $RayCastLeft
@@ -29,6 +30,7 @@ func take_damage(amount):
 # Función para morir
 func die():
 	$AnimatedSprite2D.play("death")
+	death_sfx.play()
 	await try_await()
 	queue_free()  # Elimina el enemigo de la escena
 	

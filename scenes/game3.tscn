@@ -895,6 +895,6 @@ position = Vector2(334, 0)
 position = Vector2(384, 0)
 
 [node name="Finalboss" parent="." instance=ExtResource("9_fo58v")]
-position = Vector2(-982, 291)
+position = Vector2(2663, 171)
 
 [connection signal="player_gained_missile_ability" from="Cube" to="Player" method="_on_cube_player_gained_missile_ability"]

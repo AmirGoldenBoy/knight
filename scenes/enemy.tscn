@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://cf1ftfprdjmxy"]
+[gd_scene load_steps=14 format=3 uid="uid://cf1ftfprdjmxy"]
 
 [ext_resource type="Texture2D" uid="uid://8jy0ehcsv1ox" path="res://assets/brackeys_platformer_assets/sprites/slime_green.png" id="1_g6m3g"]
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_vnkbt"]
+[ext_resource type="AudioStream" uid="uid://bigyg0kpxqy0g" path="res://assets/brackeys_platformer_assets/sounds/69_Enemy_death_01.wav" id="3_jyve8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3klwq"]
 atlas = ExtResource("1_g6m3g")
@@ -110,3 +111,7 @@ collision_mask = 53
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
 position = Vector2(0, 4.5)
 shape = SubResource("RectangleShape2D_4spkd")
+
+[node name="deathsfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_jyve8")
+volume_db = 12.17

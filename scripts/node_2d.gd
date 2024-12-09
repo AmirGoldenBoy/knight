@@ -13,4 +13,4 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		print("Colisión detectada con el jugador")
 		$AnimatedSprite2D.play("activate")
 		emit_signal("player_gained_missile_ability")
-		#queue_free()
+		queue_free()
