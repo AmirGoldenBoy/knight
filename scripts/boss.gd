@@ -3,7 +3,7 @@ extends CharacterBody2D
 # Constantes para el movimiento y el combate
 const SPEED = 200.0  
 const ATTACK_RANGE = 60.0  
-const FOLLOW_RANGE = 200.0  
+const FOLLOW_RANGE = 400.0  
 const ATTACK_DAMAGE = 20
 const ATTACK_COOLDOWN = 2.0  
 
@@ -11,14 +11,19 @@ const ATTACK_COOLDOWN = 2.0
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var player: Node2D = null
 var can_attack = true
-var health = 100
+var max_health = 1200
+var health = max_health
 var is_attacking = false
 
 # Nodos
+@onready var death_sfx = $deathsfx
+@onready var takedmg_sfx = $takedmgsfx
+@onready var attack_sfx = $attacksfx
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var attack_timer: Timer = $AttackTimer
 @onready var hurtbox: Area2D = $HurtBox
 @onready var hitbox: Area2D = $HitBox
+@onready var health_bar: ProgressBar = $HealthBar  # Referencia a la barra de vida
 
 func _ready():
 	player = get_tree().get_first_node_in_group("Player")
@@ -32,6 +37,10 @@ func _ready():
 	hitbox.monitorable = false
 	
 	add_to_group("enemies")
+	
+	# Inicializar la barra de vida
+	health_bar.max_value = max_health
+	health_bar.value = health
 
 func _physics_process(delta):
 	if not is_on_floor():
@@ -69,20 +78,16 @@ func start_attack():
 	is_attacking = true
 	can_attack = false
 
-	# Activar el `HitBox` antes de la animación
 	hitbox.set_deferred("monitoring", true)
 	hitbox.set_deferred("monitorable", true)
-	print("HitBox activado durante el ataque")
 
-	# Reproducir animación de ataque
+	attack_sfx.play()
 	if animated_sprite:
 		animated_sprite.play("Attack")
 
-	# Desactivar el `HitBox` después de la animación
 	await animated_sprite.animation_finished
 	hitbox.set_deferred("monitoring", false)
 	hitbox.set_deferred("monitorable", false)
-	print("HitBox desactivado después del ataque")
 
 	is_attacking = false
 	attack_timer.start()
@@ -95,31 +100,41 @@ func _on_attack_timer_timeout():
 	if player and health > 0 and global_position.distance_to(player.global_position) <= ATTACK_RANGE:
 		start_attack()
 
-func take_damage(amount):
-	if health <= 0:  # Si ya está muerto, no procesar más daño
+func take_damage(amount: int):
+	takedmg_sfx.play()
+	if health <= 0:
 		return
 		
 	health -= amount
+	health = max(health, 0)
+
 	print("Boss recibió ", amount, " de daño. Salud restante: ", health)
 
+	# Actualizar la barra de vida
+	health_bar.value = float(health) / max_health * health_bar.max_value
+
+	# Si la salud llega a 0, ejecutar die() inmediatamente
+	if health <= 0:
+		call_deferred("die")
+		return
+
+	# Reproducir animación de daño solo si el boss sigue vivo
 	if animated_sprite:
 		animated_sprite.stop()
 		animated_sprite.play("Hit")
 		await animated_sprite.animation_finished
 
-		if health <= 0:
-			call_deferred("die")  # Usar call_deferred para evitar llamadas múltiples
-		elif not is_attacking:
+		if not is_attacking:
 			animated_sprite.play("Idle")
 
 func die():
-	if not is_physics_processing():  # Evitar múltiples llamadas a die()
+	if not is_physics_processing():
 		return
 		
 	print("Boss está muriendo...")
 	set_physics_process(false)
 	is_attacking = false
-
+	get_node("/root/GameManager").add_enemy_defeated()
 	set_collision_layer_value(1, false)
 	set_collision_mask_value(1, false)
 
@@ -130,12 +145,18 @@ func die():
 		hurtbox.set_deferred("monitoring", false)
 		hurtbox.set_deferred("monitorable", false)
 
+	# Reproducir sonido de muerte antes de la animación
+	death_sfx.play()
+
 	if animated_sprite:
 		animated_sprite.play("Death")
 		await animated_sprite.animation_finished
-		print("Animación de muerte completada")
-		
-	await get_tree().create_timer(0.5).timeout
+	
+	var remaining_bosses = get_tree().get_nodes_in_group("bosses")
+	if remaining_bosses.size() <= 1:
+		await get_tree().create_timer(2.0).timeout
+		GameStats.complete_game()
+	
 	queue_free()
 
 func _on_hurt_box_area_entered(area: Area2D):
@@ -149,14 +170,8 @@ func _on_hurt_box_area_entered(area: Area2D):
 func _on_hit_box_body_entered(body: Node2D):
 	print("Boss HitBox colisionó con: ", body.name)
 
-	# Verificar que el cuerpo no sea el mismo jefe
 	if body == self or !is_instance_valid(body):
-		print("Colisión ignorada: cuerpo no válido o pertenece al jefe")
 		return
 	
-	# Verificar si el cuerpo es un CharacterBody2D y tiene un método `take_damage`
 	if body is CharacterBody2D and body.has_method("take_damage"):
-		print("Aplicando daño al objetivo:", body.name)
 		body.take_damage(ATTACK_DAMAGE)
-	else:
-		print("Colisión con nodo no válido para recibir daño")

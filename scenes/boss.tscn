@@ -1,7 +1,10 @@
-[gd_scene load_steps=68 format=3 uid="uid://bns5g4u2hb2hp"]
+[gd_scene load_steps=72 format=3 uid="uid://bns5g4u2hb2hp"]
 
 [ext_resource type="Texture2D" uid="uid://bjh47ikf6lkm1" path="res://assets/brackeys_platformer_assets/sprites/demon_slime_FREE_v1.0_288x160_spritesheet.png" id="1_61uc3"]
 [ext_resource type="Script" path="res://scripts/boss.gd" id="1_kw2lv"]
+[ext_resource type="AudioStream" uid="uid://cxnbso2jv6xcd" path="res://assets/55_Encounter_02.wav" id="3_56ws4"]
+[ext_resource type="AudioStream" uid="uid://dxjxrtr82ifhy" path="res://assets/51_Flee_02.wav" id="4_l08lk"]
+[ext_resource type="AudioStream" uid="uid://dt6pdt60t7vox" path="res://assets/03_Claw_03.wav" id="5_vxl1m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8qcof"]
 size = Vector2(47.5, 2)
@@ -374,7 +377,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Death",
-"speed": 8.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -465,7 +468,19 @@ animations = [{
 size = Vector2(68, 76)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c8rhl"]
-size = Vector2(88, 76)
+size = Vector2(88, 47)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tw7i5"]
+bg_color = Color(0.848627, 0.362436, 0.220504, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
 
 [node name="Finalboss" type="CharacterBody2D" groups=["enemies"]]
 collision_layer = 8
@@ -503,8 +518,26 @@ collision_layer = 8
 collision_mask = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-position = Vector2(0, -3)
+position = Vector2(0, 11.5)
 shape = SubResource("RectangleShape2D_c8rhl")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = -61.0
+offset_top = -93.0
+offset_right = 58.0
+offset_bottom = -66.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_tw7i5")
+value = 100.0
+rounded = true
+
+[node name="deathsfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_56ws4")
+
+[node name="takedmgsfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_l08lk")
+
+[node name="attacksfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_vxl1m")
 
 [connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]
 [connection signal="area_exited" from="HurtBox" to="." method="_on_hurt_box_area_exited"]

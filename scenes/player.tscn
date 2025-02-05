@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://dd3aban0fj2ya"]
+[gd_scene load_steps=50 format=3 uid="uid://dd3aban0fj2ya"]
 
 [ext_resource type="Texture2D" uid="uid://bakn5x4naw8bp" path="res://assets/brackeys_platformer_assets/sprites/knight.png" id="1_c5kwa"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ddho3"]
@@ -314,6 +314,19 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_ccx11"]
 radius = 12.0416
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w6uoe"]
+bg_color = Color(2.88785e-06, 0.721888, 0.295739, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 collision_layer = 16
 collision_mask = 59
@@ -327,7 +340,7 @@ debug_color = Color(0.839668, 0.279225, 0.408366, 0.42)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 5
-position = Vector2(0, -12)
+position = Vector2(0, -11)
 sprite_frames = SubResource("SpriteFrames_3w4k7")
 animation = &"Attack"
 autoplay = "idle"
@@ -351,5 +364,30 @@ stream = ExtResource("6_8kxyg")
 
 [node name="attacksfx" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("7_jr7l0")
+
+[node name="Healthbar" type="ProgressBar" parent="."]
+light_mask = 15
+visibility_layer = 15
+offset_left = -14.0
+offset_top = -25.0
+offset_right = 14.0
+offset_bottom = -19.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_w6uoe")
+value = 100.0
+rounded = true
+show_percentage = false
+
+[node name="Label" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -45.0
+offset_right = 20.0
+offset_bottom = -11.0
+theme_type_variation = &"TooltipLabel"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 15
+text = "0"
+horizontal_alignment = 1
 
 [connection signal="area_entered" from="HitBox" to="." method="_on_hit_box_area_entered"]

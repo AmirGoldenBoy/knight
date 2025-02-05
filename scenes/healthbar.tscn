@@ -1,7 +1,27 @@
-[gd_scene format=3 uid="uid://d13pssdxxora"]
+[gd_scene load_steps=4 format=3 uid="uid://iwfkux5s3a57"]
 
-[node name="Healthbar" type="ProgressBar"]
-offset_left = -56.0
-offset_top = -2.0
-offset_right = 57.0
-offset_bottom = 25.0
+[ext_resource type="Script" path="res://scripts/healthbar.gd" id="1_kuyfd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kx3a3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cs6be"]
+bg_color = Color(0, 0.898039, 0.113725, 1)
+
+[node name="Healthbar" type="MarginContainer"]
+custom_minimum_size = Vector2(35, 2)
+anchors_preset = -1
+anchor_top = -0.003
+anchor_bottom = -0.003
+offset_left = -18.0
+offset_top = 0.944
+offset_right = 18.0
+offset_bottom = 4.944
+script = ExtResource("1_kuyfd")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_kx3a3")
+theme_override_styles/fill = SubResource("StyleBoxFlat_cs6be")
+value = 100.0
+show_percentage = false

@@ -1,9 +1,9 @@
 extends Area2D
 
 @export var speed = 500
-@export var damage = 10
-@export var vertical_offset = 10  # Ajusta este valor para cambiar qué tan arriba aparece el misil
-
+@export var damage = 50
+@export var vertical_offset = 20  # Ajusta este valor para cambiar qué tan arriba aparece el misil
+@onready var animated_sprite = $AnimatedSprite2D
 var direction = Vector2.RIGHT
 var shooter  # Referencia al objeto que disparó el misil
 
@@ -11,7 +11,10 @@ func _ready():
 	print("Misil instanciado")
 	# Ajustar la posición inicial del misil
 	position += Vector2(0, -vertical_offset)
-	
+	if direction == Vector2.LEFT:
+		$AnimatedSprite2D.flip_h = true
+	else:
+		$AnimatedSprite2D.flip_h = false
 	# Desactivar colisiones por un breve momento
 	set_deferred("monitorable", false)
 	set_deferred("monitoring", false)

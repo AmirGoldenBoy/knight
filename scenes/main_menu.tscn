@@ -1,0 +1,118 @@
+[gd_scene load_steps=11 format=3 uid="uid://dwy46jgxfvfka"]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_l18ew"]
+[ext_resource type="Texture2D" uid="uid://jq016fk4m4t2" path="res://assets/Summer4.png" id="2_i81qp"]
+[ext_resource type="Script" path="res://scripts/animated_background.gd" id="2_k7e2f"]
+[ext_resource type="Texture2D" uid="uid://7bfjscj8x43n" path="res://assets/Summer5.png" id="3_vlktu"]
+[ext_resource type="Texture2D" uid="uid://dpfljrjra6bhg" path="res://assets/Summer6.png" id="4_ffk2w"]
+[ext_resource type="Texture2D" uid="uid://c3tt4gr8lnrk0" path="res://assets/Prinbles_Asset_Robin (v 1.1) (9_5_2023)/png/Button/Rect/Fill/Default.png" id="6_wntss"]
+[ext_resource type="Texture2D" uid="uid://c340mvs0qfgoa" path="res://assets/Prinbles_Asset_Robin (v 1.1) (9_5_2023)/png/Button/Rect/Fill/Hover.png" id="7_h0l43"]
+[ext_resource type="FontFile" uid="uid://dyswbmp83yq5l" path="res://assets/ChangaOne-Regular.ttf" id="8_xit24"]
+[ext_resource type="AudioStream" uid="uid://cp8ga503dmh24" path="res://assets/10_UI_Menu_SFX/001_Hover_01.wav" id="9_fxlf6"]
+[ext_resource type="AudioStream" uid="uid://bxuxsxvu8p6sb" path="res://assets/10_UI_Menu_SFX/013_Confirm_03.wav" id="10_2qqti"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+script = ExtResource("1_l18ew")
+
+[node name="AnimatedBackground" type="Node2D" parent="."]
+script = ExtResource("2_k7e2f")
+backgrounds = Array[Texture2D]([ExtResource("2_i81qp"), ExtResource("3_vlktu"), ExtResource("4_ffk2w")])
+
+[node name="Background1" type="Sprite2D" parent="AnimatedBackground"]
+position = Vector2(576, 324)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_i81qp")
+
+[node name="Background2" type="Sprite2D" parent="AnimatedBackground"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(580.25, 329)
+scale = Vector2(0.496745, 0.49537)
+texture = ExtResource("3_vlktu")
+
+[node name="Background3" type="Sprite2D" parent="AnimatedBackground"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(576, 328)
+scale = Vector2(0.5, 0.493827)
+texture = ExtResource("4_ffk2w")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AnimatedBackground"]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = -41.0
+offset_right = 48.0
+offset_bottom = 41.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="StartButton" type="TextureButton" parent="VBoxContainer"]
+layout_mode = 2
+tooltip_text = "Play
+
+
+"
+texture_normal = ExtResource("6_wntss")
+texture_pressed = ExtResource("7_h0l43")
+
+[node name="Label" type="Label" parent="VBoxContainer/StartButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -3.0
+offset_right = -2.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("8_xit24")
+theme_override_font_sizes/font_size = 40
+text = "Start"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ExitButton" type="TextureButton" parent="VBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("6_wntss")
+texture_pressed = ExtResource("7_h0l43")
+
+[node name="Label" type="Label" parent="VBoxContainer/ExitButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -3.0
+offset_right = -2.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("8_xit24")
+theme_override_font_sizes/font_size = 41
+text = "Exit"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HoverSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_fxlf6")
+
+[node name="PressSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_2qqti")

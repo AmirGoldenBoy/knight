@@ -1,6 +1,6 @@
 extends Area2D
 @export var speed = 200
-@export var damage = 15
+@export var damage = 20
 @export var vertical_offset = 10
 var direction = Vector2.RIGHT
 var shooter

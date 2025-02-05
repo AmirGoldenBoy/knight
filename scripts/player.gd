@@ -6,16 +6,17 @@ const JUMP_VELOCITY = -400.0
 const ATTACK_DURATION = 0.5 # Duración del ataque reducida
 const ATTACK_SPEED = 150.0   
 const MELEE_COOLDOWN = 1.0 # Cooldown de ataque reducido  
-const MAX_MISSILES = 10      
+const MAX_MISSILES = 20      
 const ROLL_FORCE = 100.0
 
 # Señales
 signal hit(damage)
+signal health_changed(new_health)
 
 # Variables de estado
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var health = 100
-var damage = 60
+var damage = 100
 var is_attacking = false
 var attack_timer = 0.0 # Temporizador para la animación de ataque
 var attack_cooldown_timer = 0.0
@@ -25,21 +26,37 @@ var missile_count = MAX_MISSILES
 var direction = 0
 var roll_direction = Vector2.ZERO
 
+# Regeneración de vida
+var health_regeneration_rate = 1.0  # 1 de vida por segundo
+var time_since_last_regeneration = 0.0
+
 # Nodos
+@onready var health_bar: ProgressBar = $Healthbar
 @onready var attack_sfx = $attacksfx
 @onready var powerup_sfx = $powerupsfx
 @onready var arrow_sfx = $arrowsfx
 @onready var jump_sfx = $Jumpsfx
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var hit_box: Area2D = $HitBox
+@onready var missile_label: Label = $Label
 @export var missile_scene: PackedScene 
 @export var fire_rate = 1.0 
 
 func _ready():
-	# Conectar señales
 	animated_sprite.animation_finished.connect(_on_AnimatedSprite2D_animation_finished)
 	hit_box.add_to_group("player_hitbox")
 	add_to_group("Player")
+	health_bar.value = health  # Inicializar la barra de vida
+	print("Healthbar")
+	# Cargar el estado de los proyectiles
+	can_shoot_missiles = PlayerState.can_shoot_missiles
+	missile_count = PlayerState.missile_count
+	print("Estado de los proyectiles cargado: ", can_shoot_missiles, missile_count)
+	update_missile_label()
+
+func _process(delta):
+	# Regeneración de vida
+	regenerate_health(delta)
 
 func _physics_process(delta):
 	# Aplicar gravedad y movimiento horizontal
@@ -61,6 +78,17 @@ func _physics_process(delta):
 	# Disparo de misiles
 	shoot_missiles(delta)
 
+func regenerate_health(delta):
+	time_since_last_regeneration += delta
+	if time_since_last_regeneration >= 1.0:  # Cada segundo
+		if health < 100:  # Solo regenerar si la vida no está al máximo
+			health += health_regeneration_rate
+			health = clamp(health, 0, 100)  # Asegurar que la vida no exceda el máximo
+			health_bar.value = health  # Actualizar la barra de vida
+			emit_signal("health_changed", health)
+			print("Vida regenerada. Salud actual: ", health)
+		time_since_last_regeneration = 0.0  # Reiniciar el temporizador
+
 func apply_gravity_and_movement(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -80,6 +108,9 @@ func apply_gravity_and_movement(delta):
 		velocity.x = direction * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 1, SPEED)
+
+func update_missile_label():
+	missile_label.text = "%d" % missile_count
 
 func handle_attack(delta):
 	attack_timer += delta
@@ -116,6 +147,9 @@ func shoot_missile():
 		get_parent().add_child(missile)
 		missile_count -= 1
 		print("Misil disparado en dirección: ", missile.direction)
+		PlayerState.missile_count = missile_count
+		update_missile_label()
+		print("Misil disparado. Misiles restantes: ", missile_count)
 
 func start_attack():
 	is_attacking = true
@@ -144,6 +178,9 @@ func _on_projectile_collision(projectile: Area2D):
 
 func take_damage(amount):
 	health -= amount
+	health = clamp(health, 0, 100)
+	health_bar.value = health  # Actualizar la barra de vida
+	emit_signal("health_changed", health)
 	print("Jugador recibió ", amount, " de daño. Salud restante: ", health)
 	if health <= 0:
 		die()
@@ -173,11 +210,15 @@ func die():
 
 	# Reiniciar la escena
 	get_tree().reload_current_scene()
+
 func _on_cube_player_gained_missile_ability():
 	powerup_sfx.play()
 	can_shoot_missiles = true
 	missile_count = MAX_MISSILES
-	print("Habilidad de misiles obtenida")
+	PlayerState.can_shoot_missiles = can_shoot_missiles
+	PlayerState.missile_count = missile_count
+	update_missile_label()
+	print("Habilidad de misiles obtenida: ", can_shoot_missiles, missile_count)
 
 func _on_hit_box_area_entered(area: Area2D) -> void:
 	if not is_attacking:
@@ -197,3 +238,9 @@ func update_animation(direction):
 			animated_sprite.play("Run")
 	else:
 		animated_sprite.play("Jump")
+func heal(amount: int):
+	health += amount
+	health = clamp(health, 0, 100)  # Asegurar que la vida no exceda el máximo
+	health_bar.value = health  # Actualizar la barra de vida
+	emit_signal("health_changed", health)
+	print("Jugador curado. Salud actual: ", health)

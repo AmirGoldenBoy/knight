@@ -25,6 +25,7 @@ func take_damage(amount):
 func die():
 	$AnimatedSprite2D.play("death")
 	death_sfx.play()
+	get_node("/root/GameManager").add_enemy_defeated()
 	await try_await()
 	queue_free()  # Elimina el enemigo de la escena
 	

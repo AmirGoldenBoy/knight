@@ -11,13 +11,16 @@ config_version=5
 [application]
 
 config/name="knightgame"
-run/main_scene="res://scenes/game.tscn"
+run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Music="*res://scenes/music.tscn"
+PlayerState="*res://scripts/playerstate.gd"
+GameStats="*res://scripts/GameStats.gd"
+GameManager="*res://scripts/GameManager.gd"
 
 [global_group]
 
