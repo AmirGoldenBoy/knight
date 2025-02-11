@@ -1,5 +1,4 @@
 extends Node
-
 var score = 0
 var enemies_defeated = 0
 var start_time = 0
@@ -7,6 +6,11 @@ var last_game_stats = {}
 
 func _ready():
 	start_time = Time.get_unix_time_from_system()
+
+func _input(event):
+	if event is InputEventKey:
+		if event.keycode == KEY_F5 and event.pressed:
+			reset_game()
 
 func add_point():
 	score += 1
@@ -27,6 +31,11 @@ func reset_stats():
 	enemies_defeated = 0
 	start_time = Time.get_unix_time_from_system()
 
-# 🔧 Nueva función para evitar el error de función inexistente
+func reset_game():
+	var game_stats = get_node("/root/GameStats")
+	game_stats.reset_time()
+	reset_stats()
+	get_tree().reload_current_scene()
+
 func set_game_stats(stats: Dictionary):
 	last_game_stats = stats

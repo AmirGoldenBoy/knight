@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=4 uid="uid://cj5yj5w8lo1o6"]
+[gd_scene load_steps=21 format=4 uid="uid://cj5yj5w8lo1o6"]
 
 [ext_resource type="PackedScene" uid="uid://dd3aban0fj2ya" path="res://scenes/player.tscn" id="1_otyq3"]
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_qxx4b"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dr7j1bclseria" path="res://scenes/node_2d.tscn" id="9_65au0"]
 [ext_resource type="PackedScene" uid="uid://dtvjq66y3vh1v" path="res://scenes/nextlevel.tscn" id="10_h4nfs"]
 [ext_resource type="PackedScene" uid="uid://tdf7hh37bqqx" path="res://scenes/slime_boss.tscn" id="11_rtbtk"]
+[ext_resource type="FontFile" uid="uid://dbluktxg2c7v3" path="res://assets/brackeys_platformer_assets/fonts/PixelOperator8-Bold.ttf" id="12_fuw0c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rk0l6"]
 texture = ExtResource("2_3wuhg")
@@ -579,5 +580,19 @@ position = Vector2(194, 44)
 
 [node name="SlimeBoss4" parent="." instance=ExtResource("11_rtbtk")]
 position = Vector2(1836, 76)
+
+[node name="Label" type="Label" parent="."]
+offset_left = -773.0
+offset_top = -98.0
+offset_right = -499.0
+offset_bottom = -20.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("12_fuw0c")
+theme_override_font_sizes/font_size = 8
+text = "Space = Jump
+E = Roll (Attack)
+Left Click = Arrow
+Killing Green Slimes Heals you"
+uppercase = true
 
 [connection signal="player_gained_missile_ability" from="Cube" to="Player" method="_on_cube_player_gained_missile_ability"]

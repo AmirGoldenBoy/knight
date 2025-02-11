@@ -10,6 +10,7 @@ const MAX_MISSILES = 20
 const ROLL_FORCE = 100.0
 
 # Señales
+signal player_died
 signal hit(damage)
 signal health_changed(new_health)
 
@@ -186,29 +187,17 @@ func take_damage(amount):
 		die()
 
 func die():
+	emit_signal("player_died")
 	print("Jugador ha muerto")
-	# Desactivar toda la física y movimiento
 	set_physics_process(false)
-	# Desactivar el proceso de input
 	set_process_input(false)
-	# Desactivar las colisiones
 	set_collision_layer_value(1, false)
 	set_collision_mask_value(1, false)
-
-	# Interrumpir cualquier otra animación que se esté reproduciendo
 	is_attacking = false
 	velocity = Vector2.ZERO
-
-	# Reproducir la animación de muerte
 	animated_sprite.play("Death")
-
-	# Esperar a que termine la animación
 	await animated_sprite.animation_finished
-
-	# Pequeña pausa antes de reiniciar
 	await get_tree().create_timer(0.5).timeout
-
-	# Reiniciar la escena
 	get_tree().reload_current_scene()
 
 func _on_cube_player_gained_missile_ability():

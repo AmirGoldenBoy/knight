@@ -13,7 +13,6 @@ func _ready():
 func display_stats():
 	var stats = get_node("/root/GameManager").last_game_stats
 	
-	# 🔧 Nueva verificación para evitar el error de acceso a `time`
 	if not stats.has("time"):
 		print("Error: 'last_game_stats' no contiene 'time'", stats)
 		return
